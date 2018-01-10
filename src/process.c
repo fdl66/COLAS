@@ -3,7 +3,16 @@
 
 int main(int argc, char *argv[]) {
 
-    char usage[] = "Usage: processc --process-type [0 (R), 1 (W), 2 (S)]\n\t\t\t[--ip  xx.xx.xx.xx] [...] (servers)\n\t\t\t[--filesize  s] (default 1 KB)\n\t\t\t[--wait m] (default 100ms)\n\t\t\t[--algorithm ABD/SODAW(default)]\n\t\t\t[--code rlnc(default)/reed-solomon]\n\t\t\t--serverid name\n";
+    char usage[] =
+            "Usage: processc --process-type [0 (R), 1 (W), 2 (S)]\n\t\t\t"
+            "[--ip  xx.xx.xx.xx] [...] (servers)\n\t\t\t"
+            "[--filesize  s] (default 1 KB)\n\t\t\t"
+            "[--wait m] (default 100ms)\n\t\t\t"
+            "[--algorithm ABD/SODAW(default)]\n\t\t\t"
+            "[--code rlnc(default)/reed-solomon]\n\t\t\t"
+            "[--serverid name]\n\t\t\t"
+            "[--port num]\n\t\t\t"
+    ;
 
 
     Parameters parameters;
@@ -193,6 +202,8 @@ unsigned int readParameters(int argc, char *argv[], Parameters *parameters) {
                 printf("ERROR: unknown coding algorithm choice \"%s\"\n",argv[i]);
                 return 0;
             }
+        } else if( strcmp(argv[i], "--port")==0) {
+            parameters->wait = atoi(argv[++i]);
         } else {
             printf("ERROR: unknown argument \"%s\"\n",argv[i]);
             return 0;

@@ -130,13 +130,13 @@ func Reader_process(parameters *Parameters) {
 
 	var cparameters C.Parameters
 	copyGoParamToCParam(&cparameters, parameters)
-	if parameters.Num_servers > 0 {
-		data.active = true
-		for i := 0; i < int(parameters.Num_servers); i++ {
-			data.servers[parameters.Ip_list[i]] = true
-		}
+	//if parameters.Num_servers > 0 {
+	//	data.active = true
+	//	for i := 0; i < int(parameters.Num_servers); i++ {
+	//		data.servers[parameters.Ip_list[i]] = true
+	//	}
 
-	}
+	//}
 	C.printParameters(cparameters)
 
 	reader_daemon(&cparameters, parameters)

@@ -21,7 +21,7 @@ extern int s_interrupted;
 Server_Status *status;
 Server_Args *server_args;
 
-#ifdef ASLIBRARY
+//#ifdef ASLIBRARY
 
 //  .split server task
 //  This is our server task.

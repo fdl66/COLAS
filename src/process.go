@@ -131,3 +131,35 @@ func main() {
 	daemons.PrintFooter()
 }
 
+/*
+
+compile error!!!
+
+cd $WORK
+gcc -I . -fPIC -m64 -pthread -fmessage-length=0 -no-pie -c trivial.c
+cd /home/docker/COLAS/src/daemons
+gcc -I . -fPIC -m64 -pthread -fmessage-length=0 -o $WORK/_/home/docker/COLAS/src/daemons/_obj/_all.o $WORK/_/home/docker/COLAS/src/daemons/_obj/_cgo_export.o $WORK/_/home/docker/COLAS/src/daemons/_obj/reader.cgo2.o $WORK/_/home/docker/COLAS/src/daemons/_obj/server.cgo2.o $WORK/_/home/docker/COLAS/src/daemons/_obj/writer.cgo2.o -g -O2 -L../abd -L../sodaw -L../abd -L../sodaw -L../abd -L../sodaw -Wl,-r -nostdlib -no-pie -Wl,--build-id=none
+/home/docker/go/pkg/tool/linux_amd64/compile -o $WORK/_/home/docker/COLAS/src/daemons.a -trimpath $WORK -p _/home/docker/COLAS/src/daemons -buildid fcd25fb6024f497120af151d6ab986a9c33e1f3f -D _/home/docker/COLAS/src/daemons -I $WORK -I /home/docker/golang/pkg/linux_amd64 -pack ./controller.go ./controllerRoutes.go ./getParamRoutes.go ./httpServer.go ./logger.go ./params.go ./routes.go ./setParamRoutes.go ./utilities.go ./utils.go $WORK/_/home/docker/COLAS/src/daemons/_obj/_cgo_gotypes.go $WORK/_/home/docker/COLAS/src/daemons/_obj/reader.cgo1.go $WORK/_/home/docker/COLAS/src/daemons/_obj/server.cgo1.go $WORK/_/home/docker/COLAS/src/daemons/_obj/writer.cgo1.go $WORK/_/home/docker/COLAS/src/daemons/_obj/_cgo_import.go
+# _/home/docker/COLAS/src/daemons
+daemons/reader.go:66[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/reader.cgo1.go:89]: cannot convert _Ctype_uint(data.write_counter) (type _Ctype_uint) to type *_Ctype_struct__ENCODED_DATA
+daemons/reader.go:66[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/reader.cgo1.go:89]: cannot convert _Cfunc_CString(servers_str) (type *_Ctype_char) to type *_Ctype_struct__client_Args
+daemons/reader.go:66[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/reader.cgo1.go:89]: too many arguments in call to _Cfunc_SODAW_read
+daemons/server.go:79[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/server.cgo1.go:95]: cannot use _Cfunc_CString(data.name) (type *_Ctype_char) as type [100]_Ctype_char in assignment
+daemons/server.go:81[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/server.cgo1.go:97]: cannot use _Cfunc_CString(data.port) (type *_Ctype_char) as type [100]_Ctype_char in assignment
+daemons/writer.go:71[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/writer.cgo1.go:94]: cannot convert _Ctype_uint(len(encoded)) (type _Ctype_uint) to type *_Ctype_struct__ENCODED_DATA
+daemons/writer.go:71[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/writer.cgo1.go:94]: cannot convert _Cfunc_CString(servers_str) (type *_Ctype_char) to type *_Ctype_struct__client_Args
+daemons/writer.go:71[/tmp/go-build744530533/_/home/docker/COLAS/src/daemons/_obj/writer.cgo1.go:94]: too many arguments in call to _Cfunc_SODAW_write
+Makefile:50: recipe for target 'rebuild' failed
+make: *** [rebuild] Error 2
+docker@5202d2673c07:~/COLAS/src$
+docker@5202d2673c07:~/COLAS/src$
+docker@5202d2673c07:~/COLAS/src/daemons$ cat -n reader.go | grep 66
+    66							C.CString(data.name),
+docker@5202d2673c07:~/COLAS/src/daemons$ cat -n server.go | grep 79
+    79		server_args.server_id = C.CString(data.name)
+docker@5202d2673c07:~/COLAS/src/daemons$ cat -n server.go | grep 81
+    81		server_args.port = C.CString(data.port)
+docker@5202d2673c07:~/COLAS/src/daemons$ cat -n writer.go | grep 71
+    71							(C.uint)(data.write_counter), rawdata, (C.uint)(len(encoded)),
+
+*/
