@@ -203,7 +203,7 @@ unsigned int readParameters(int argc, char *argv[], Parameters *parameters) {
                 return 0;
             }
         } else if( strcmp(argv[i], "--port")==0) {
-            parameters->wait = atoi(argv[++i]);
+            parameters->port = atoi(argv[++i]);
         } else {
             printf("ERROR: unknown argument \"%s\"\n",argv[i]);
             return 0;
