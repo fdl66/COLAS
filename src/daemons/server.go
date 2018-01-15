@@ -49,13 +49,14 @@ func server_daemon() {
 
 	time.Sleep(time.Second)
 	//C.server_process(C.CString(data.name),  C.CString(servers_str), C.CString(data.port), init_data, &status)
-
+	fmt.Println("debug*********************server1")
 	for {
 		select {
 		case active := <-active_chan:
 			data.active = active
 			InitializeServerParameters(&server_args, &status)
 			LogParameters()
+			fmt.Println("debug*********************server2")
 			go C.server_process(&server_args, &status)
 		case _ = <-reset_chan:
 			data.active = false

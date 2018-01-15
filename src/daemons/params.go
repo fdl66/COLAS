@@ -137,12 +137,13 @@ func InitializeParameters() {
 	}
 
 	data.active = false
+	//data.active = true
 
 	/*
 		data.active = true
 		data.algorithm = "SODAW"
 		data.servers["172.17.0.2"] = true
-		data.servers["172.17.0.3"] = true
+
 		data.servers["172.17.0.4"] = true
 	*/
 }
@@ -159,7 +160,7 @@ func SetDefaultParameters(parameters *Parameters) {
 	parameters.Coding_algorithm = full_vector
 	parameters.Wait = 100
 	parameters.Filesize_kb = 1.1
-	parameters.Processtype = 2
+	parameters.Processtype = 1
 	parameters.port = PORT
 	parameters.port1 = PORT1
 }

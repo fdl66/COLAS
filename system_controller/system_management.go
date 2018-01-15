@@ -183,7 +183,7 @@ func start(c *cli.Context) error {
 	_, _, _, controllers := getIPAddresses()
 	sendCommandToControllers(controllers, "StartReaders", "")
 	sendCommandToControllers(controllers, "StartWriters", "")
-	//	sendCommandToControllers(controllers, "StartServers", "")
+	//sendCommandToControllers(z, "StartServers", "")
 	return nil
 }
 
@@ -592,3 +592,202 @@ func getIPAddresses() ([]string, []string, []string, []string) {
 	}
 	return readers, writers, servers, controllers
 }
+/*
+./system_management start
+
+writer error
+
+Running http server
+INFO	Set Servers
+ servers   1
+INFO	SetName
+writer_0
+Expected 1 parameters, found 2
+writer_0
+INFO	StartProcess called
+fatal error: unexpected signal during runtime execution
+[signal 0xb code=0x1 addr=0x0 pc=0x7f41388130cc]
+
+runtime stack:
+runtime.throw(0x854ba0, 0x2a)
+	/home/docker/go/src/runtime/panic.go:547 +0x90
+runtime.sigpanic()
+	/home/docker/go/src/runtime/sigpanic_unix.go:12 +0x5a
+
+goroutine 1 [syscall, locked to thread]:
+runtime.cgocall(0x6b9300, 0xc82004baa0, 0x0)
+	/home/docker/go/src/runtime/cgocall.go:123 +0x11b fp=0xc82004ba50 sp=0xc82004ba20
+_/home/docker/COLAS/src/daemons._Cfunc_SODAW_write(0x7f41300008c0, 0x7f4130000ac0, 0x7f4100000000, 0x7f4130000a20, 0x88, 0x7f4130000ae0, 0x7f4130000b00, 0x0)
+	??:0 +0x41 fp=0xc82004baa0 sp=0xc82004ba50
+_/home/docker/COLAS/src/daemons.writer_deamon()
+	/home/docker/COLAS/src/daemons/writer.go:72 +0x72a fp=0xc82004bd50 sp=0xc82004baa0
+_/home/docker/COLAS/src/daemons.Writer_process(0xc820072f00)
+	/home/docker/COLAS/src/daemons/writer.go:102 +0x1ea fp=0xc82004bdf8 sp=0xc82004bd50
+main.main()
+	/home/docker/COLAS/src/abdprocess.go:87 +0x29e fp=0xc82004bf50 sp=0xc82004bdf8
+runtime.main()
+	/home/docker/go/src/runtime/proc.go:188 +0x2b0 fp=0xc82004bfa0 sp=0xc82004bf50
+runtime.goexit()
+	/home/docker/go/src/runtime/asm_amd64.s:1998 +0x1 fp=0xc82004bfa8 sp=0xc82004bfa0
+
+goroutine 17 [syscall, locked to thread]:
+runtime.goexit()
+	/home/docker/go/src/runtime/asm_amd64.s:1998 +0x1
+
+goroutine 20 [IO wait]:
+net.runtime_pollWait(0x7f4138ba20e8, 0x72, 0x0)
+	/home/docker/go/src/runtime/netpoll.go:160 +0x60
+net.(*pollDesc).Wait(0xc820148b50, 0x72, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:73 +0x3a
+net.(*pollDesc).WaitRead(0xc820148b50, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:78 +0x36
+net.(*netFD).accept(0xc820148af0, 0x0, 0x7f4138ba21e0, 0xc820132e00)
+	/home/docker/go/src/net/fd_unix.go:426 +0x27c
+net.(*TCPListener).AcceptTCP(0xc820028228, 0x452c60, 0x0, 0x0)
+	/home/docker/go/src/net/tcpsock_posix.go:254 +0x4d
+net/http.tcpKeepAliveListener.Accept(0xc820028228, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2427 +0x41
+net/http.(*Server).Serve(0xc8200f3980, 0x7f4138ba21a8, 0xc820028228, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2117 +0x129
+net/http.(*Server).ListenAndServe(0xc8200f3980, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2098 +0x136
+net/http.ListenAndServe(0x7dda70, 0x5, 0x7f4138ba1110, 0xc82000e050, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2195 +0x98
+_/home/docker/COLAS/src/daemons.HTTP_Server()
+	/home/docker/COLAS/src/daemons/httpServer.go:62 +0x801
+created by _/home/docker/COLAS/src/daemons.Writer_process
+	/home/docker/COLAS/src/daemons/writer.go:100 +0x1e5
+
+goroutine 3 [IO wait]:
+net.runtime_pollWait(0x7f4138ba2028, 0x72, 0xc82016e000)
+	/home/docker/go/src/runtime/netpoll.go:160 +0x60
+net.(*pollDesc).Wait(0xc820148bc0, 0x72, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:73 +0x3a
+net.(*pollDesc).WaitRead(0xc820148bc0, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:78 +0x36
+net.(*netFD).Read(0xc820148b60, 0xc82016e000, 0x1000, 0x1000, 0x0, 0x7f4138b61000, 0xc820070000)
+	/home/docker/go/src/net/fd_unix.go:250 +0x23a
+net.(*conn).Read(0xc820028230, 0xc82016e000, 0x1000, 0x1000, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/net.go:172 +0xe4
+net/http.(*connReader).Read(0xc820132e20, 0xc82016e000, 0x1000, 0x1000, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:526 +0x196
+bufio.(*Reader).fill(0xc82013a660)
+	/home/docker/go/src/bufio/bufio.go:97 +0x1e9
+bufio.(*Reader).ReadSlice(0xc82013a660, 0xa, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/bufio/bufio.go:328 +0x21a
+bufio.(*Reader).ReadLine(0xc82013a660, 0x0, 0x0, 0x0, 0x7c4200, 0x0, 0x0)
+	/home/docker/go/src/bufio/bufio.go:357 +0x53
+net/textproto.(*Reader).readLineSlice(0xc820129350, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/textproto/reader.go:55 +0x81
+net/textproto.(*Reader).ReadLine(0xc820129350, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/textproto/reader.go:36 +0x40
+net/http.readRequest(0xc82013a660, 0x0, 0xc8201a0000, 0x0, 0x0)
+	/home/docker/go/src/net/http/request.go:721 +0xb6
+net/http.(*conn).readRequest(0xc8200f3a00, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:705 +0x359
+net/http.(*conn).serve(0xc8200f3a00)
+	/home/docker/go/src/net/http/server.go:1425 +0x947
+created by net/http.(*Server).Serve
+	/home/docker/go/src/net/http/server.go:2137 +0x44e
+
+*/
+
+/*
+
+
+INFO	Starting reader
+
+Running http server
+INFO	Set Servers
+ servers   0
+INFO	SetName
+reader_0
+Expected 1 parameters, found 2
+reader_0
+INFO	StartProcess called
+fatal error: unexpected signal during runtime execution
+[signal 0xb code=0x1 addr=0x0 pc=0x7fe3531350cc]
+
+runtime stack:
+runtime.throw(0x854ba0, 0x2a)
+	/home/docker/go/src/runtime/panic.go:547 +0x90
+runtime.sigpanic()
+	/home/docker/go/src/runtime/sigpanic_unix.go:12 +0x5a
+
+goroutine 1 [syscall, locked to thread]:
+runtime.cgocall(0x6b9230, 0xc82004baf8, 0x0)
+	/home/docker/go/src/runtime/cgocall.go:123 +0x11b fp=0xc82004baa8 sp=0xc82004ba78
+_/home/docker/COLAS/src/daemons._Cfunc_SODAW_read(0x7fe3480008c0, 0x7fe348000a20, 0x7fe300000000, 0x7fe348000a40, 0x7fe348000a60, 0x0)
+	??:0 +0x42 fp=0xc82004baf8 sp=0xc82004baa8
+_/home/docker/COLAS/src/daemons.reader_daemon()
+	/home/docker/COLAS/src/daemons/reader.go:69 +0x495 fp=0xc82004bd58 sp=0xc82004baf8
+_/home/docker/COLAS/src/daemons.Reader_process(0xc820072f00)
+	/home/docker/COLAS/src/daemons/reader.go:101 +0x2b3 fp=0xc82004bdf8 sp=0xc82004bd58
+main.main()
+	/home/docker/COLAS/src/abdprocess.go:85 +0x278 fp=0xc82004bf50 sp=0xc82004bdf8
+runtime.main()
+	/home/docker/go/src/runtime/proc.go:188 +0x2b0 fp=0xc82004bfa0 sp=0xc82004bf50
+runtime.goexit()
+	/home/docker/go/src/runtime/asm_amd64.s:1998 +0x1 fp=0xc82004bfa8 sp=0xc82004bfa0
+
+goroutine 17 [syscall, locked to thread]:
+runtime.goexit()
+	/home/docker/go/src/runtime/asm_amd64.s:1998 +0x1
+
+goroutine 20 [IO wait]:
+net.runtime_pollWait(0x7fe3534c40e8, 0x72, 0x0)
+	/home/docker/go/src/runtime/netpoll.go:160 +0x60
+net.(*pollDesc).Wait(0xc820164b50, 0x72, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:73 +0x3a
+net.(*pollDesc).WaitRead(0xc820164b50, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:78 +0x36
+net.(*netFD).accept(0xc820164af0, 0x0, 0x7fe3534c81e0, 0xc820194000)
+	/home/docker/go/src/net/fd_unix.go:426 +0x27c
+net.(*TCPListener).AcceptTCP(0xc820028218, 0x452c60, 0x0, 0x0)
+	/home/docker/go/src/net/tcpsock_posix.go:254 +0x4d
+net/http.tcpKeepAliveListener.Accept(0xc820028218, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2427 +0x41
+net/http.(*Server).Serve(0xc8200ff980, 0x7fe3534c41a8, 0xc820028218, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2117 +0x129
+net/http.(*Server).ListenAndServe(0xc8200ff980, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2098 +0x136
+net/http.ListenAndServe(0x7dda70, 0x5, 0x7fe3534c3110, 0xc82000e050, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:2195 +0x98
+_/home/docker/COLAS/src/daemons.HTTP_Server()
+	/home/docker/COLAS/src/daemons/httpServer.go:62 +0x801
+created by _/home/docker/COLAS/src/daemons.Reader_process
+	/home/docker/COLAS/src/daemons/reader.go:96 +0x116
+
+goroutine 50 [IO wait]:
+net.runtime_pollWait(0x7fe3534c4028, 0x72, 0xc82019e000)
+	/home/docker/go/src/runtime/netpoll.go:160 +0x60
+net.(*pollDesc).Wait(0xc82018a060, 0x72, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:73 +0x3a
+net.(*pollDesc).WaitRead(0xc82018a060, 0x0, 0x0)
+	/home/docker/go/src/net/fd_poll_runtime.go:78 +0x36
+net.(*netFD).Read(0xc82018a000, 0xc82019e000, 0x1000, 0x1000, 0x0, 0x7fe353483000, 0xc820070000)
+	/home/docker/go/src/net/fd_unix.go:250 +0x23a
+net.(*conn).Read(0xc82018e000, 0xc82019e000, 0x1000, 0x1000, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/net.go:172 +0xe4
+net/http.(*connReader).Read(0xc820194020, 0xc82019e000, 0x1000, 0x1000, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:526 +0x196
+bufio.(*Reader).fill(0xc82019c000)
+	/home/docker/go/src/bufio/bufio.go:97 +0x1e9
+bufio.(*Reader).ReadSlice(0xc82019c000, 0xa, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/bufio/bufio.go:328 +0x21a
+bufio.(*Reader).ReadLine(0xc82019c000, 0x0, 0x0, 0x0, 0x7c4200, 0x0, 0x0)
+	/home/docker/go/src/bufio/bufio.go:357 +0x53
+net/textproto.(*Reader).readLineSlice(0xc82018c060, 0x0, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/textproto/reader.go:55 +0x81
+net/textproto.(*Reader).ReadLine(0xc82018c060, 0x0, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/textproto/reader.go:36 +0x40
+net/http.readRequest(0xc82019c000, 0x0, 0xc82010d6c0, 0x0, 0x0)
+	/home/docker/go/src/net/http/request.go:721 +0xb6
+net/http.(*conn).readRequest(0xc820190000, 0x0, 0x0, 0x0)
+	/home/docker/go/src/net/http/server.go:705 +0x359
+net/http.(*conn).serve(0xc820190000)
+	/home/docker/go/src/net/http/server.go:1425 +0x947
+created by net/http.(*Server).Serve
+	/home/docker/go/src/net/http/server.go:2137 +0x44e
+
+*/

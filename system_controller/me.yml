@@ -1,0 +1,9 @@
+writer:
+    image: fdl66/colas:latest
+    #command: /root/COLAS/src/process --process-type 1
+    command: /bin/bash
+    volumes:
+        - /home/dl/docker:/root
+    environment:
+    - LD_LIBRARY_PATH=/usr/local/lib:/root/COLAS/src/abd:/root/COLAS/src/soda:/root/COLAS/src/codes:/root/COLAS/src/sodaw
+

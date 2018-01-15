@@ -4,6 +4,7 @@ CC=gcc -g  -DDEBUG
 CFLAGS= -Iutilities/ -Iabd/ -Icodes/ -Isodaw  -IZMQ/include 
 LDFLAGS= -lm -LZMQ/zmqlibs  -LZMQ/czmqlibs  -lzmq -lczmq  -Labd/ -Lcodes/ -Lsodaw -lsodaw  -lrlnc_rs -labd -Wimplicit-function-declaration -fPIC -Wall 
 
+GCFLAGS= -gcflags "-N -l"
 
 all: $(ALL)
 
@@ -16,7 +17,7 @@ CSRCS = abd/abd_client.c abd/abd_reader.c abd/abd_writer.c abd/abd_server.c abd/
 
 process: $(TARGET) $(SRCS)  #$(CSRCS)
 	go fmt $(SRCS)
-	go build -x -o process $(TARGET)
+	go build $(GCFLAGS)  -x -o process $(TARGET)
 
 all=CODES ABD SODAW $(TARGET)
 
@@ -62,7 +63,7 @@ build:
 	make -C codes 
 	make -C abd 
 	make -C sodaw
-	go build -x -o $(TARGET) process.go
+	go build $(GCFLAGS)  -x -o $(TARGET) process.go 
 
 clean:
 	rm -rf logs $(TARGET) $(TARGET1) */*.o

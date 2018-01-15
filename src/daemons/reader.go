@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"time"
 	"unsafe"
+	"strings"
 )
 
 /*
@@ -25,20 +26,36 @@ import "C"
 
 func reader_daemon(cparameters *C.Parameters, parameters *Parameters) {
 	active_chan = make(chan bool, 2)
+	//var object_name string = "atomic_object"
+	data.active=false
 
-	//	var object_name string = "atomic_object"
-
-	var client_args *C.ClientArgs = C.create_ClientArgs(*cparameters)
-	var encoding_info *C.EncodeData = C.create_EncodeData(*cparameters)
+	var client_args *C.ClientArgs
+	var encoding_info *C.EncodeData
 	var data_read_c *C.char
 	var abd_data *C.RawData
 	var opnum int = 0
-	write_initial_data(cparameters, parameters)
 
 	for {
 		select {
 		case active := <-active_chan: //start
 			data.active = active
+			if len(data.servers) <= 0 {
+				data.active=false
+				fmt.Println("please set servers,next startporcess")
+				break
+			}
+			for k,v := range data.servers{
+				if v {
+					parameters.Ip_list= append(parameters.Ip_list, k)
+				}
+			}
+			parameters.Ipaddresses=strings.Join(parameters.Ip_list, " ")
+			parameters.Num_servers = uint(len(parameters.Ip_list))
+			copyGoParamToCParam(cparameters, parameters)
+
+			client_args= C.create_ClientArgs(*cparameters)
+			encoding_info = C.create_EncodeData(*cparameters)
+
 			ReinitializeParameters()
 			LogParameters()
 			write_initial_data(cparameters, parameters)
@@ -48,6 +65,8 @@ func reader_daemon(cparameters *C.Parameters, parameters *Parameters) {
 			data.write_counter = 0
 		default:
 			if data.active == true && len(data.servers) > 0 {
+				fmt.Println("************asdfasdf2")
+
 				opnum++
 
 				//rand_wait := rand_wait_time()*int64(time.Millisecond) + int64(time.Millisecond)
@@ -107,7 +126,7 @@ func reader_daemon(cparameters *C.Parameters, parameters *Parameters) {
 
 				data.write_counter += 1
 			} else {
-				time.Sleep(5 * 1000 * time.Microsecond)
+				time.Sleep(5 * time.Microsecond)
 			}
 		}
 	}
@@ -130,12 +149,13 @@ func Reader_process(parameters *Parameters) {
 
 	var cparameters C.Parameters
 	copyGoParamToCParam(&cparameters, parameters)
+
+
 	if parameters.Num_servers > 0 {
 		data.active = true
 		for i := 0; i < int(parameters.Num_servers); i++ {
 			data.servers[parameters.Ip_list[i]] = true
 		}
-
 	}
 	C.printParameters(cparameters)
 
@@ -165,8 +185,9 @@ func write_initial_data(cparameters *C.Parameters, parameters *Parameters) {
 	}
 
 	if data.algorithm == "SODAW" {
+		fmt.Println("**************debug**********reader" + data.algorithm)
 		C.SODAW_write(C.CString("atomic_object"), C.uint(opnum), payload, C.uint(payload_size), encoding_info, client_args)
 	}
 
-	C.free(payload)
+	C.free(unsafe.Pointer(payload))
 }

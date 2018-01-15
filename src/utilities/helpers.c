@@ -93,8 +93,8 @@ RawData *create_RawData(Parameters parameters) {
 
 ClientArgs *create_ClientArgs(Parameters parameters) {
 
+    printf("debug create_ClientArgs************************\n");
     char *servers_str = get_servers_str(parameters);
-
     ClientArgs *client_args  = (ClientArgs *)malloc(sizeof(ClientArgs));
 
     strcpy(client_args->client_id, parameters.server_id);

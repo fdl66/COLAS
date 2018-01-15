@@ -1,0 +1,28 @@
+reader:
+    image: fdl66/colas:latest
+    command: /root/COLAS/src/process --process-type 0 --ip 127.0.0.1
+    volumes:
+        - /home/dl/docker:/root
+    environment:
+    - LD_LIBRARY_PATH=/usr/local/lib:/root/COLAS/src/abd:/root/COLAS/src/soda:/root/COLAS/src/codes:/root/COLAS/src/sodaw
+
+writer:
+    image: fdl66/colas:latest
+    command: /root/COLAS/src/process --process-type 1 --ip 127.0.0.1
+        - /home/dl/docker:/root
+    environment:
+    - LD_LIBRARY_PATH=/usr/local/lib:/root/COLAS/src/abd:/root/COLAS/src/soda:/root/COLAS/src/codes:/root/COLAS/src/sodaw
+
+server:
+    image: fdl66/colas:latest
+    command: /root/COLAS/src/process --process-type 2 
+        - /home/dl/docker:/root
+    environment:
+    - LD_LIBRARY_PATH=/usr/local/lib:/root/COLAS/src/abd:/root/COLAS/src/soda:/root/COLAS/src/codes:/root/COLAS/src/sodaw
+
+controller:
+    image: fdl66/colas:latest
+    command: /root/COLAS/src/process --process-type 3
+        - /home/dl/docker:/root
+    environment:
+    - LD_LIBRARY_PATH=/usr/local/lib:/root/COLAS/src/abd:/root/COLAS/src/soda:/root/COLAS/src/codes:/root/COLAS/src/sodaw
